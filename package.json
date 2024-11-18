@@ -1,0 +1,44 @@
+{
+    "name": "radredsavreader",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "serve dist",
+        "build": "npm run copy-html && npm run build-css && npm run build-js",
+        "copy-html": "copyfiles -u 1 src/**/*.html dist/",
+        "build-css": "postcss src/css/styles.css -o dist/css/styles.css",
+        "build-js": "esbuild src/js/main.js --bundle --outfile=dist/js/bundle.js --sourcemap",
+        "watch": "npm run copy-html && concurrently \"npm run watch-css\" \"npm run watch-js\" \"npm run watch-html\"",
+        "watch-css": "postcss src/css/styles.css -o dist/css/styles.css --watch",
+        "watch-js": "esbuild src/js/main.js --bundle --outfile=dist/js/bundle.js --sourcemap --watch",
+        "watch-html": "copyfiles -u 1 src/**/*.html dist/ --watch"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "autoprefixer": "^10.4.20",
+        "concurrently": "^9.1.0",
+        "copyfiles": "^2.4.1",
+        "esbuild": "^0.24.0",
+        "postcss": "^8.4.49",
+        "postcss-cli": "^11.0.0",
+        "serve": "^14.2.4",
+        "tailwindcss": "^3.4.15"
+    },
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome against localhost",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/dist",
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+                "/*": "${webRoot}/*"
+            }
+        }
+    ]
+}
