@@ -6,11 +6,12 @@ function main() {
 async function handleFileSelect(event) {
     const file = event.target.files[0];
     if (!file) return;
+    const level = document.getElementById('level').value;
 
     try {
         const buffer = await file.arrayBuffer();
         const data = new Uint8Array(buffer);
-        const result = await parse_save(data);
+        const result = await parse_save(data, level);
         displayResults(result);
     } catch (error) {
         console.error('Error processing save file:', error);
@@ -44,10 +45,9 @@ function displayResults(result) {
     `;
 }
 
-async function parse_save(data) {
+async function parse_save(data, level) {
     const SAVE_INDEX_A_OFFSET = 0xffc;
     const SAVE_BLOCK_B_OFFSET = 0x00E000;
-    const TRAINER_ID_OFFSET = 0xa;
     const SAVE_INDEX_B_OFFSET = SAVE_BLOCK_B_OFFSET + SAVE_INDEX_A_OFFSET;
 
     // Load move and pokemon data
@@ -154,7 +154,7 @@ async function parse_save(data) {
 
         // Build import data string
         import_data += `${all_mons[species_id].trim()}\n`;
-        import_data += `Level: 100\n`; // You'll need to define static_level
+        import_data += `Level: ${level}\n`;
         import_data += `${nature} Nature\n`;
         import_data += `Ability: ${ability}\n`;
         moves.forEach(m => import_data += `- ${m}\n`);
