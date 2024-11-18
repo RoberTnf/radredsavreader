@@ -5,14 +5,15 @@
     "main": "index.js",
     "scripts": {
         "start": "serve dist",
-        "build": "npm run copy-html && npm run build-css && npm run build-js",
+        "build": "pnpm run copy-assets && pnpm run copy-html && pnpm run build-css && pnpm run build-js",
         "copy-html": "copyfiles -u 1 src/**/*.html dist/",
         "build-css": "postcss src/css/styles.css -o dist/css/styles.css",
         "build-js": "esbuild src/js/main.js --bundle --outfile=dist/js/bundle.js --sourcemap",
-        "watch": "npm run copy-html && concurrently \"npm run watch-css\" \"npm run watch-js\" \"npm run watch-html\"",
+        "watch": "pnpm run copy-html && concurrently \"pnpm run watch-css\" \"pnpm run watch-js\" \"pnpm run watch-html\"",
         "watch-css": "postcss src/css/styles.css -o dist/css/styles.css --watch",
         "watch-js": "esbuild src/js/main.js --bundle --outfile=dist/js/bundle.js --sourcemap --watch",
-        "watch-html": "copyfiles -u 1 src/**/*.html dist/ --watch"
+        "watch-html": "copyfiles -u 1 src/**/*.html dist/ --watch",
+        "copy-assets": "copyfiles -u 1 ref/* dist/ref/"
     },
     "keywords": [],
     "author": "",

@@ -118,7 +118,6 @@ async function parse_save(data) {
     for (let n = 0; n < box_data.length; n += 2) {
         const data = box_data.slice(n, n + 2);
         if (!(data[0] === MAGIC_STRING[0] && data[1] === MAGIC_STRING[1])) continue;
-        console.log("HERE")
 
         let showdown_data;
         if (mon_count < party_count) {
@@ -132,7 +131,7 @@ async function parse_save(data) {
         const ability_slot = (pid % 2 === 0) ? 0 : (showdown_data[showdown_data.length - 1] === 191 ? 2 : 1);
 
         const species_id = new DataView(new Uint8Array(showdown_data.slice(0, 2)).buffer).getUint16(0, true);
-        console.log(species_id);
+        // console.log(species_id);
 
         if (!all_mons[species_id] || all_mons[species_id] === "-----") {
             continue;
