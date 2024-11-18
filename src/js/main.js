@@ -146,8 +146,16 @@ async function parse_save(data, level) {
                 moves.push(all_moves[move_id]);
             }
         } else {
-            const moves_binary = Array.from(showdown_data.slice(-19, -13))
-                .map(b => b.toString(2).padStart(8, '0'))
+            // Convert bytes to binary string, least significant bit first
+            const moves_binary = Array.from(showdown_data.slice(-19, -14))
+                .map(byte => {
+                    // Convert to binary and reverse bits to match Ruby's 'b*' unpacking
+                    return byte.toString(2)
+                        .padStart(8, '0')
+                        .split('')
+                        .reverse()
+                        .join('');
+                })
                 .join('');
             moves = parse_moves(moves_binary, all_moves);
         }
