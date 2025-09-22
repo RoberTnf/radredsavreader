@@ -37,12 +37,49 @@ function displayResults(result) {
         </div>
     `;
 
-    // Update the HTML
+    // Update the HTML with copy button and message area
     outputDiv.innerHTML = `
+        <div class="output-header mb-4 flex justify-between items-center">
+            <h2 class="text-xl font-semibold">Pokemon Data</h2>
+            <button id="copyButton" class="copy-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Copy to Clipboard
+            </button>
+        </div>
+        <div id="copyMessage" class="copy-message hidden mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded"></div>
         <div class="pokemon-data">
             ${formattedData}
         </div>
     `;
+
+    // Add copy button functionality
+    const copyButton = document.getElementById('copyButton');
+    copyButton.addEventListener('click', () => copyToClipboard(result.import_data));
+
+    // Automatically copy to clipboard
+    copyToClipboard(result.import_data, true);
+}
+
+function copyToClipboard(text, isAutomatic = false) {
+    navigator.clipboard.writeText(text).then(() => {
+        showCopyMessage(isAutomatic ? 'Pokemon data automatically copied to clipboard!' : 'Pokemon data copied to clipboard!');
+    }).catch(err => {
+        console.error('Failed to copy text: ', err);
+        showCopyMessage('Failed to copy to clipboard', true);
+    });
+}
+
+function showCopyMessage(message, isError = false) {
+    const messageDiv = document.getElementById('copyMessage');
+    if (messageDiv) {
+        messageDiv.textContent = message;
+        messageDiv.className = `copy-message mb-4 p-3 rounded ${isError ? 'bg-red-100 border border-red-400 text-red-700' : 'bg-green-100 border border-green-400 text-green-700'}`;
+        messageDiv.classList.remove('hidden');
+
+        // Hide message after 3 seconds
+        setTimeout(() => {
+            messageDiv.classList.add('hidden');
+        }, 3000);
+    }
 }
 
 async function parse_save(data, level) {
